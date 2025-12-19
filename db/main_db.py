@@ -57,3 +57,10 @@ def delete_task(task_id):
     cursor.execute(queries.DELETE_TASKS, (task_id, ))
     conn.commit()
     conn.close()
+
+def delete_completed_tasks():
+    conn = sqlite3.connect(path_db)
+    cursor = conn.cursor()
+    cursor.execute("DELETE FROM tasks WHERE completed = 1")
+    conn.commit()
+    conn.close()

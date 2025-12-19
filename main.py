@@ -15,15 +15,14 @@ def main(page: ft.Page):
             task_list.controls.append(create_task_row(task_id=task_id, task_text=task_text, completed=completed))
         page.update()
 
-    def del_button(e):
-        # main_db.delete_task()
-        task_field.value= ""
-        task_field.read_only = False
-        task_field.update()
-        page.update()
+    def clear_completed_tasks(e):
+        main_db.delete_completed_tasks()
+        task_list.controls.clear()
+        load_tasks()
 
+    clearall_button = ft.ElevatedButton("Удалить все", on_click=clear_completed_tasks, color=ft.Colors.RED_400)
 
-    delete_button = ft.IconButton(icon=ft.Icons.DELETE, icon_color=ft.Colors.RED, on_click=del_button)
+    delete_button = ft.IconButton(icon=ft.Icons.DELETE, icon_color=ft.Colors.RED, on_click=None)
 
     def create_task_row(task_id, task_text, completed):
         task_field = ft.TextField(value=task_text, read_only=True, expand=True)
@@ -73,7 +72,9 @@ def main(page: ft.Page):
         ft.ElevatedButton("Готово", on_click=lambda e: set_filter('completed'), icon=ft.Icons.CHECK_BOX, icon_color=ft.Colors.GREEN)
     ], alignment=ft.MainAxisAlignment.SPACE_EVENLY)
 
-    page.add(ft.Row([task_input, task_input_button]), filter_buttons, task_list)
+    dell_all = ft.Row([clearall_button])
+
+    page.add(ft.Row([task_input, task_input_button]), filter_buttons, task_list, dell_all)
     load_tasks()
 
 
